@@ -1,4 +1,3 @@
-
 import { GoogleGenAI } from "@google/genai";
 import { Recipe, Language } from "../types";
 
@@ -135,11 +134,13 @@ export const generateDishImage = async (
     });
 
     let imageUrl = "";
-    for (const part of response.candidates[0].content.parts) {
-      if (part.inlineData) {
-        const base64EncodeString = part.inlineData.data;
-        imageUrl = `data:image/png;base64,${base64EncodeString}`;
-        break;
+    if (response.candidates?.[0]?.content?.parts) {
+      for (const part of response.candidates[0].content.parts) {
+        if (part.inlineData) {
+          const base64EncodeString = part.inlineData.data;
+          imageUrl = `data:image/png;base64,${base64EncodeString}`;
+          break;
+        }
       }
     }
 
