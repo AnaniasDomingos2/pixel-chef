@@ -1,0 +1,5 @@
+{
+  "name": "PixelChef",
+  "description": "Um micro-app minimalista que gera receitas criativas com base em 3 ingredientes usando IA.",
+  "requestFramePermissions": []
+}
