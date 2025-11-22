@@ -1,7 +1,32 @@
 import { GoogleGenAI } from "@google/genai";
 import { Recipe, Language } from "../types";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// Função helper para recuperar a chave de API de forma segura em diferentes ambientes
+const getApiKey = (): string => {
+  // 1. Tenta recuperar via Vite (padrão para Vercel/React modernos)
+  try {
+    // @ts-ignore - import.meta é padrão ESModules/Vite
+    if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_KEY) {
+      // @ts-ignore
+      return import.meta.env.VITE_API_KEY;
+    }
+  } catch (e) {
+    // Ignora se não suportado
+  }
+
+  // 2. Fallback para ambientes Node.js ou compatíveis com process.env
+  try {
+    if (typeof process !== 'undefined' && process.env && process.env.API_KEY) {
+      return process.env.API_KEY;
+    }
+  } catch (e) {
+    // process não definido, ignora
+  }
+
+  return "";
+};
+
+const ai = new GoogleGenAI({ apiKey: getApiKey() });
 
 export const validateIngredients = async (ingredients: string[]): Promise<string[]> => {
   const model = "gemini-2.5-flash";
